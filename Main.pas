@@ -66,10 +66,10 @@ begin
 
     LoadMap('level1.txt');
 
-    with TBackgroundSprite.Create(AdSpriteEngine) do
+    {with TBackgroundSprite.Create(AdSpriteEngine) do
     begin
       Image:= AdImageList.Find('fon')
-    end;
+    end; }
   end
   else
   begin

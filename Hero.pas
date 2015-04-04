@@ -60,8 +60,8 @@ begin
           Form1.Hero.onGround:= True;
         end;
       end;
-    end;
-  {if Sprite is TBloks then
+    end; }
+  if Sprite is TBloks then
   begin
     if (Form1.keyRight) then
       x:= TBloks(Sprite).x - Self.Width + 0.5
@@ -74,7 +74,7 @@ begin
     else
     if not onGround then
       y:= TBloks(Sprite).Y - Self.Height;
-  end;}
+  end;
 
 end;
 
@@ -84,33 +84,34 @@ var
 begin
   //ShowMessage(IntToStr(Round(Form1.hero.y) div 32)+ ' --- ' + IntToStr(Round(Form1.Hero.x) div 32));
   if flag then
-    for j:= (Round(Form1.Hero.x) div 32) to (Round(Form1.Hero.x + Form1.Hero.Width) div 32) do
-    begin
-      //ShowMessage(IntToStr(i)+ ' --- ' + IntToStr(j));
-      if (list[Round(Form1.hero.y) div 32][j + 1] = 'x') then
       begin
         if (Form1.Hero.dx < 0) and (flag = True) then
-          Form1.Hero.x:= j * 32 + 32;
+          for j:= (Round(Form1.Hero.x - Form1.Hero.Width) div 32) to (Round(Form1.Hero.x) div 32) do
+            if (list[Round(Form1.hero.y) div 32][j + 1] = 'x') then
+              Form1.Hero.x:= j * 32 + 32;
         if (Form1.Hero.dx > 0) and (flag = true) then
-          Form1.Hero.x:= j * 32 - Form1.Hero.Width;
-
+          for j:= (Round(Form1.Hero.x) div 32) to (Round(Form1.Hero.x + Form1.Hero.Width) div 32) do
+            if (list[Round(Form1.hero.y) div 32][j + 1] = 'x') then
+              Form1.Hero.x:= j * 32 - Form1.Hero.Width;
       end;
-    end;
   if not flag then
-    for i:= (Round(Form1.hero.y) div 32) to (Round(Form1.hero.y + Form1.Hero.Height) div 32) do
-      if (list[i][Round(Form1.hero.x) div 32] = 'x') then
+
       begin
         if (Form1.Hero.dy < 0) and (flag = false) then
-        begin
-          Form1.Hero.y:= i * 32 + 32;
-          Form1.Hero.dy:= 0;
-        end;
+          for i:= (Round(Form1.hero.y - Form1.Hero.Height) div 32) to (Round(Form1.hero.y) div 32) do
+            if (list[i][Round(Form1.hero.x) div 32 + 1] = 'x') then
+            begin
+              Form1.Hero.y:= i * 32 + 32;
+              Form1.Hero.dy:= 0;
+            end;
         if (Form1.Hero.dy > 0) and (flag = false) then
-        begin
-          Form1.Hero.y:= i * 32 - Form1.Hero.height;
-          Form1.Hero.dy:= 0;
-          Form1.Hero.onGround:= True;
-        end;
+          for i:= (Round(Form1.hero.y) div 32) to (Round(Form1.hero.y + Form1.Hero.Height) div 32) do
+            if (list[i][Round(Form1.hero.x) div 32 + 1] = 'x') then
+            begin
+              Form1.Hero.y:= i * 32 - Form1.Hero.height;
+              Form1.Hero.dy:= 0;
+              Form1.Hero.onGround:= True;
+            end;
       end;
 end;
 
@@ -127,15 +128,13 @@ begin
       //x:= x - Speed * TimeGap;
       AnimLoop:= True;
     end;
-  if (Form1.keyRight) and (x < Form1.AdDraw.Width - Form1.Hero.Width) then
+  if (Form1.keyRight) {and (x < Form1.AdDraw.Width - Form1.Hero.Width)} then
     begin
       Form1.Hero.dx:= 0.2;
-      //AnimStart:= 0;
-      //AnimStop:= 6;
       //x:= x + Speed * TimeGap;
       //Form1.Hero.Ground(Form1.Hero);
     end;
-      if (Form1.keyUp) {and (y > 0) and (onGround) and (list[Round(y) div 32 + 1][Round(x) div 32 + 1] = 'x')} then
+      if (Form1.keyUp) and (y > 0) {and (onGround) and (list[Round(y) div 32 + 1][Round(x) div 32 + 1] = 'x')} then
         if Form1.Hero.onGround then
         begin
           Form1.Hero.dy:= -1;
@@ -152,12 +151,13 @@ begin
     X:= X + dx * Form1.AdPerCounter.TimeGap;
     Done:= True;
     MyCollision(Done);
-    if (not onGround) then // and (y < (list.Count+1) * 32) then
-      dy:= dy + 0.003 * Form1.AdPerCounter.TimeGap;
-    y:= y + dy * Form1.AdPerCounter.TimeGap;
+    if (not onGround) or (list[Round(Form1.Hero.Y) div 32][Round(Form1.Hero.X) div 32 - 1] <> 'x') then // and (y < (list.Count+1) * 32) then
+      dy:= dy + 0.006 * Form1.AdPerCounter.TimeGap;
+    y:= y + dy ;//* Form1.AdPerCounter.TimeGap;
     Done:= False;
     MyCollision(Done);
     dx:= 0;
+    Collision;
   end;
 
   with Form1 do
@@ -177,7 +177,7 @@ begin
 
   end; }
 
-  //Collision;
+
 end;
 
 procedure THero.Ground(Sprite: TSprite);
