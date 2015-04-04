@@ -17,7 +17,6 @@ type
       Speed: integer;
       SpeedG: integer;
       onGround: Boolean;
-      procedure Ground(Sprite: TSprite);
       procedure DoMove(TimeGap:double);override;
       constructor Create(AParent:TSprite);override;
       procedure DoCollision(Sprite:TSprite; var Done:boolean);override;
@@ -36,7 +35,8 @@ begin
 end;
 
 procedure THero.DoCollision(Sprite: TSprite; var Done: boolean);
-//var
+var
+  s: Char;
   //i, j: integer;
 begin
   {for i:= (Round(Form1.hero.y) div 32) to (Round(Form1.hero.y + Form1.Hero.Height) div 32) do
@@ -63,19 +63,24 @@ begin
     end; }
   if Sprite is TBloks then
   begin
-    if (Form1.keyRight) then
+    if (Form1.keyRight) and (list[Round(Form1.Hero.y + Form1.Hero.Width) div 32][Round(Form1.Hero.X) div 32] = 'x') then
       x:= TBloks(Sprite).x - Self.Width + 0.5
     else
-    if (Form1.keyLeft) then
+    if (Form1.keyLeft) and (list[Round(Form1.Hero.y) div 32][Round(Form1.Hero.X) div 32] = 'x') then
       x:= TBloks(Sprite).x + TBloks(Sprite).Width - 0.5
     else
-    if (Form1.keyUp) then
+    if (Form1.keyUp) and (list[Round(Form1.Hero.y) div 32][Round(Form1.Hero.X - Form1.Hero.Height) div 32] = 'x') then
       y:= TBloks(Sprite).Y + TBloks(Sprite).Height
     else
-    if not onGround then
+    if (not onGround) and (list[Round(Form1.Hero.y) div 32][Round(Form1.Hero.X + Form1.Hero.Height) div 32] <> 'x') then
+    begin
       y:= TBloks(Sprite).Y - Self.Height;
+      onGround:= True;
+    end;
   end;
-
+  s:= ' ';
+  if Sprite is TMonets then
+      TMonets(Sprite).Dead;
 end;
 
 procedure MyCollision(flag: Boolean);
@@ -86,9 +91,9 @@ begin
   if flag then
       begin
         if (Form1.Hero.dx < 0) and (flag = True) then
-          for j:= (Round(Form1.Hero.x - Form1.Hero.Width) div 32) to (Round(Form1.Hero.x) div 32) do
-            if (list[Round(Form1.hero.y) div 32][j + 1] = 'x') then
-              Form1.Hero.x:= j * 32 + 32;
+          //for j:= (Round(Form1.Hero.x) div 32) to (Round(Form1.Hero.x + Form1.Hero.Width) div 32) do
+            if (list[Round(Form1.hero.y) div 32][Round(Form1.Hero.x) div 32 + 1] = 'x') then
+              Form1.Hero.x:= Round(Form1.Hero.x);
         if (Form1.Hero.dx > 0) and (flag = true) then
           for j:= (Round(Form1.Hero.x) div 32) to (Round(Form1.Hero.x + Form1.Hero.Width) div 32) do
             if (list[Round(Form1.hero.y) div 32][j + 1] = 'x') then
@@ -132,28 +137,26 @@ begin
     begin
       Form1.Hero.dx:= 0.2;
       //x:= x + Speed * TimeGap;
-      //Form1.Hero.Ground(Form1.Hero);
     end;
-      if (Form1.keyUp) and (y > 0) {and (onGround) and (list[Round(y) div 32 + 1][Round(x) div 32 + 1] = 'x')} then
+      if (Form1.keyUp) and (y > 0) then
         if Form1.Hero.onGround then
         begin
           Form1.Hero.dy:= -1;
           Form1.Hero.onGround:= False;
-          //y:= y - (Speed {+ 10000) * TimeGap;
-        //Form1.Hero.Ground(Form1.Hero);
+          //y:= y - (Speed + 10000) * TimeGap;
         end;
 
   if (not Form1.keyLeft) and (not Form1.keyRight) then
     AnimActive:= false;
-
   with Form1.Hero do
   begin
     X:= X + dx * Form1.AdPerCounter.TimeGap;
     Done:= True;
     MyCollision(Done);
-    if (not onGround) or (list[Round(Form1.Hero.Y) div 32][Round(Form1.Hero.X) div 32 - 1] <> 'x') then // and (y < (list.Count+1) * 32) then
+    if (not onGround) or (list[Round(Form1.Hero.Y) div 32][Round(Form1.Hero.X) div 32] <> 'x')then
       dy:= dy + 0.006 * Form1.AdPerCounter.TimeGap;
     y:= y + dy ;//* Form1.AdPerCounter.TimeGap;
+    onGround:= False;
     Done:= False;
     MyCollision(Done);
     dx:= 0;
@@ -167,7 +170,7 @@ begin
     //AdSpriteEngine.Y:= - Self.Y - Self.Height / 2 + AdDraw.Height / 2;
   end;
 
-  {if (list[Round(y) div 32 + 1][Round(x) div 32] <> 'x') then
+  {if (list[Round(Form1.Hero.Y) div 32][Round(Form1.Hero.X + Form1.Hero.Height) div 32] <> 'x') then
     onGround:= False
   else
     onGround:= True;
@@ -177,17 +180,7 @@ begin
 
   end; }
 
-
-end;
-
-procedure THero.Ground(Sprite: TSprite);
-begin
-  inherited;
-  if Collision = 0 then
-  begin
-    Y:= Y + 0.1 * Form1.AdPerCounter.TimeGap;
-    //Collision;
-  end;
+  Collision;
 end;
 
 end.

@@ -11,6 +11,10 @@ type
   end;
 
 type
+  TMonets = class (TImageSprite)
+  end;
+
+type
   TForm1 = class(TForm)
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -162,14 +166,21 @@ begin
       case list.Strings[Yi][Xi] of
         'x':
           begin
-          AdDraw.BeginScene;
             with TBloks.Create(AdSpriteEngine) do
             begin
               Image:= AdImageList.Find('bloks');
               x:= (Xi - 1) * Width;
               y:= Yi * Height;
             end;
-          AdDraw.EndScene;
+          end;
+        'm':
+          begin
+            with TMonets.Create(AdSpriteEngine) do
+            begin
+              Image:= AdImageList.Find('monets');
+              x:= (Xi - 1) * Width;
+              y:= Yi * Height;
+            end;
           end;
         'p':
           begin
