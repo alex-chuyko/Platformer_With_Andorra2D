@@ -4,7 +4,11 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, AdDraws, AdClasses, AdTypes, AdSprites, AdPerformanceCounter, Hero;
+  Dialogs, AdDraws, AdClasses, AdTypes, AdSprites, AdPerformanceCounter, Hero, Enemy;
+
+type
+  TDead = class (TImageSprite)
+  end;
 
 type
   TBloks = class (TImageSprite)
@@ -13,6 +17,14 @@ type
 type
   TMonets = class (TImageSprite)
   end;
+
+{type
+  TEnemy = class (TImageSprite)
+    Speed: Integer;
+    dx: Double;
+    procedure ECollision(Sprite: TSprite);
+    procedure EMove;
+  end; }
 
 type
   TForm1 = class(TForm)
@@ -30,6 +42,7 @@ type
     AdPerCounter: TAdPerformanceCounter;
     AdImageList: TAdImageList;
     Hero: THero;
+    Enemy: TEnemy;
 
     ///////InputMandler///////
 
@@ -84,6 +97,8 @@ begin
 end;
 
 procedure TForm1.Idle(Sender: TObject; var Done: boolean);
+var
+  todey: string;
 begin
   if AdDraw.CanDraw then
   begin
@@ -94,10 +109,14 @@ begin
       AdSpriteEngine.Move(AdPerCounter.TimeGap / 1000);
       AdSpriteEngine.Draw;
       AdSpriteEngine.Dead;
-      //AdImageList.Find('bloks').Draw(AdDraw, 0, 0, 0);
       with AdDraw.Canvas do
       begin
-        TextOut(5, 5,'FPS: ' + FloatToStr(AdPerCounter.FPS));
+        todey:= TimeToStr(now);
+        TextOut(640, 580, 'Time: ' + todey);
+        //TextOut(5, 5,'FPS: ' + FloatToStr(AdPerCounter.FPS));
+        Pen.Color:= Ad_ARGB(255,255,255,255);
+        Font:= AdDraw.Fonts.GenerateFont('Comic Sans MS',15, [afItalic]);
+        TextOut(5, 580,'Points: ' + IntToStr(Hero.n));
         Release;
       end;
     AdDraw.EndScene;
@@ -117,41 +136,26 @@ end;
 procedure TForm1.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if Key = VK_LEFT then
-  begin
-    //Hero.dx:= -4;
+  if (Key = VK_LEFT) or (Key = 65) then
     keyLeft:= True;
-  end;
-  if Key = VK_RIGHT then
-  begin
-    //Hero.dx:= 4;
+  if (Key = VK_RIGHT) or (Key = 68) then
     keyRight:= True;
-  end;
-  if Key = VK_UP then
-  begin
+  if (Key = VK_UP) or (Key = 87) then
     keyUp:= True;
-    //if Hero.onGround then
-       // begin
-        //  Hero.dy:= -1;
-        //  Hero.onGround:= False;
-        //end
-  end;
-  if Key = VK_DOWN then
-  begin
+  if (Key = VK_DOWN) or (Key = 83) then
     keyDown:= True;
-  end;
 end;
 
 procedure TForm1.FormKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if Key = VK_LEFT then
+  if (Key = VK_LEFT) or (Key = 65) then
     keyLeft:= False;
-  if Key = VK_RIGHT then
+  if (Key = VK_RIGHT) or (Key = 68) then
     keyRight:= False;
-  if Key = VK_UP then
+  if (Key = VK_UP) or (Key = 87) then
     keyUp:= False;
-  if Key = VK_DOWN then
+  if (Key = VK_DOWN) or (Key = 83) then
     keyDown:= False;
 end;
 
@@ -178,8 +182,20 @@ begin
             with TMonets.Create(AdSpriteEngine) do
             begin
               Image:= AdImageList.Find('monets');
-              x:= (Xi - 1) * Width;
-              y:= Yi * Height;
+              x:= (Xi - 1) * 32;
+              y:= Yi * 32;
+            end;
+          end;
+        'e':
+          begin
+            Enemy:= TEnemy.Create(AdSpriteEngine);
+            with Enemy do
+            begin
+              Image:= AdImageList.Find('enemy');
+              x:= (Xi - 1) * 32;
+              y:= Yi * 32;
+              dx:= 0.05;
+              Speed:= 120;
             end;
           end;
         'p':
@@ -193,6 +209,15 @@ begin
               AnimActive:= False;
               AnimSpeed:= 7;
               Speed:= 150;
+            end;
+          end;
+        'd':
+          begin
+            with TDead.Create(AdSpriteEngine) do
+            begin
+              Image:= AdImageList.Find('pust');
+              x:= (Xi - 1) * 32;
+              y:= Yi * 32;
             end;
           end;
       end;
