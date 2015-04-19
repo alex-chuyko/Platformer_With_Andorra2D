@@ -11,6 +11,7 @@ type
     protected
 
     public
+      life: Boolean;
       n: Integer;
       dx: Double;
       dy: Double;
@@ -26,14 +27,14 @@ type
 
 implementation
 
-uses Main;
+uses Main, Enemy;
 
 { THero }
 
 constructor THero.Create(AParent: TSprite);
 begin
   inherited;
-
+  onGround:= true;
 end;
 
 procedure THero.DoCollision(Sprite: TSprite; var Done: boolean);
@@ -79,18 +80,24 @@ begin
       onGround:= True;
     end;
   end;
+
   if Sprite is TMonets then
   begin
-      TMonets(Sprite).Dead;
-      n:= n + 10;
+    TMonets(Sprite).Dead;
+    n:= n + 10;
   end;
-  if Sprite is TDead then
+
+  if (Sprite is TDead) then//or (Sprite is TEnemy)  then
   begin
     Form1.Hero.Dead;
     ShowMessage('GAME OVER! :(');
-    //dy:= 0;
-    //Form1.FormDestroy(Form1);
+    Form1.Hero.dy:= 0;
+    Form1.Hero.dx:= 0;
+    life:= false;
+    Halt;
   end;
+  if Sprite is TEnemy then
+    TEnemy(Sprite).Dead;
 end;
 
 procedure MyCollision(flag: Boolean);
@@ -115,7 +122,7 @@ begin
           for i:= (Round(Form1.hero.y - Form1.Hero.Height) div 32) to (Round(Form1.hero.y) div 32) do
             if (list[i][Round(Form1.hero.x) div 32 + 1] = 'x') then
             begin
-              Form1.Hero.y:= i * 32 + 32;
+              Form1.Hero.y:= i * 32 + 33;
               Form1.Hero.dy:= 0;
             end;
         if (Form1.Hero.dy > 0) then
@@ -127,73 +134,64 @@ begin
               Form1.Hero.onGround:= True;
             end;
       end;
+  Form1.Hero.Collision;
 end;
 
 procedure THero.DoMove(TimeGap: double);
 var
-  i, j: integer;
   Done: Boolean;
 begin
   inherited;
   AnimActive:= True;
-  if (Form1.keyLeft){ and (x > 0)} then
+  if (Form1.keyLeft) then
     begin
       Form1.Hero.dx:= -0.2;
-      //x:= x - Speed * TimeGap;
       AnimLoop:= True;
     end;
-  if (Form1.keyRight) {and (x < Form1.AdDraw.Width - Form1.Hero.Width)} then
+  if (Form1.keyRight) then
     begin
       Form1.Hero.dx:= 0.2;
-      //x:= x + Speed * TimeGap;
+      AnimLoop:= True;
     end;
       if (Form1.keyUp) and (y > 0) then
         if Form1.Hero.onGround then
         begin
-          Form1.Hero.dy:= -0.32;
+          Form1.Hero.dy:= -0.4;
           Form1.Hero.onGround:= False;
-          //y:= y - (Speed + 10000) * TimeGap;
         end;
 
   if (not Form1.keyLeft) and (not Form1.keyRight) then
     AnimActive:= false;
-    Collision;
-  with Form1.Hero do
+    //Collision;
+
+  if life then
   begin
-    X:= X + dx * Form1.AdPerCounter.TimeGap;
-    Done:= True;
-    MyCollision(Done);
-    if (not onGround) or (list[Round(Form1.Hero.Y) div 32][Round(Form1.Hero.X) div 32] <> 'x')then
-      dy:= dy + 0.0007 * Form1.AdPerCounter.TimeGap;
-    y:= y + dy * Form1.AdPerCounter.TimeGap;
-    onGround:= False;
-    Done:= False;
-    MyCollision(Done);
-    dx:= 0;
-    Collision;                     
-  end;
+    with Form1.Hero do
+    begin
+      X:= X + dx * Form1.AdPerCounter.TimeGap;
+      Done:= True;
+      MyCollision(Done);
+      if (not onGround) or (list[Round(Form1.Hero.Y) div 32][Round(Form1.Hero.X) div 32] <> 'x')then
+        dy:= dy + 0.0007 * Form1.AdPerCounter.TimeGap;
+      y:= y + dy * Form1.AdPerCounter.TimeGap;
+      onGround:= False;
+      Done:= False;
+      MyCollision(Done);
+      dx:= 0;
+      Collision;
+    end;
+  end
+  else
+    Halt;
 
   with Form1 do
   begin
-    if (Form1.Hero.X > 385) then
+    if (Form1.Hero.X > 385) and (Form1.Hero.X < 2337) then
       AdSpriteEngine.x:= - Self.X - Self.Width / 2 + AdDraw.Width / 2;
     //AdSpriteEngine.Y:= - Self.Y - Self.Height / 2 + AdDraw.Height / 2;
   end;
 
-  {if (list[Round(Form1.Hero.Y) div 32][Round(Form1.Hero.X + Form1.Hero.Height) div 32] <> 'x') then
-    onGround:= False
-  else
-    onGround:= True;
-  if not onGround then
-  begin
-    Form1.Hero.y:= Form1.Hero.y + (Speed - 50) * TimeGap;
-
-  end; }
-
   Collision;
-
-  //Form1.Enemy.EMove;
-  //Form1.Enemy.ECollision(Form1.Enemy);
 end;
 
 end.

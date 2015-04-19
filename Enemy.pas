@@ -18,7 +18,7 @@ type
 
 implementation
 
-uses Main;
+uses Main, Hero;
 
 { TEnemy }
 
@@ -32,7 +32,10 @@ procedure TEnemy.DoCollision(Sprite: TSprite; var Done: boolean);
 begin
   inherited;
   if (Sprite is TBloks) then
+  begin
     dx:= -dx;
+    
+  end;
 end;
 
 procedure TEnemy.DoMove(TimeGap: double);

@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, AdDraws, AdClasses, AdTypes, AdSprites, AdPerformanceCounter, Hero, Enemy;
+  Dialogs, AdDraws, AdClasses, AdTypes, AdSprites, AdPerformanceCounter, Hero, Enemy,
+  ExtCtrls;
 
 type
   TDead = class (TImageSprite)
@@ -28,12 +29,15 @@ type
 
 type
   TForm1 = class(TForm)
+    img1: TImage;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure img1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
   public
@@ -42,7 +46,8 @@ type
     AdPerCounter: TAdPerformanceCounter;
     AdImageList: TAdImageList;
     Hero: THero;
-    Enemy: TEnemy;
+    EnemyArray: array of TEnemy;
+    enemyCount: Integer;
 
     ///////InputMandler///////
 
@@ -60,6 +65,8 @@ var
 
 implementation
 
+uses Menu, Pause;
+
 {$R *.dfm}
 
 procedure TForm1.FormCreate(Sender: TObject);
@@ -69,7 +76,7 @@ begin
   with AdDraw.Display do
   begin
     Width:= 800;
-    Height:= 608;
+    Height:= 480;
     DisplayMode:= dmWindowed;
   end;
   if AdDraw.Initialize then
@@ -86,7 +93,7 @@ begin
     {with TBackgroundSprite.Create(AdSpriteEngine) do
     begin
       Image:= AdImageList.Find('fon')
-    end; }
+    end;}
   end
   else
   begin
@@ -112,11 +119,11 @@ begin
       with AdDraw.Canvas do
       begin
         todey:= TimeToStr(now);
-        TextOut(640, 580, 'Time: ' + todey);
+        TextOut(640, 450, 'Time: ' + todey);
         //TextOut(5, 5,'FPS: ' + FloatToStr(AdPerCounter.FPS));
         Pen.Color:= Ad_ARGB(255,255,255,255);
         Font:= AdDraw.Fonts.GenerateFont('Comic Sans MS',15, [afItalic]);
-        TextOut(5, 580,'Points: ' + IntToStr(Hero.n));
+        TextOut(5, 450,'Points: ' + IntToStr(Hero.n));
         Release;
       end;
     AdDraw.EndScene;
@@ -137,13 +144,26 @@ procedure TForm1.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if (Key = VK_LEFT) or (Key = 65) then
+  begin
     keyLeft:= True;
+    Hero.AnimStart:= 0;
+    Hero.AnimStop:= 6;
+  end;
   if (Key = VK_RIGHT) or (Key = 68) then
+  begin
     keyRight:= True;
+    Hero.AnimStart:= 7;
+    Hero.AnimStop:= 13;
+  end;
   if (Key = VK_UP) or (Key = 87) then
     keyUp:= True;
   if (Key = VK_DOWN) or (Key = 83) then
     keyDown:= True;
+  if Key = 27 then
+  begin
+    Form3.Show;
+    Form3.SetFocus;
+  end;
 end;
 
 procedure TForm1.FormKeyUp(Sender: TObject; var Key: Word;
@@ -184,12 +204,14 @@ begin
               Image:= AdImageList.Find('monets');
               x:= (Xi - 1) * 32;
               y:= Yi * 32;
+              AnimSpeed:= 15;
             end;
           end;
         'e':
           begin
-            Enemy:= TEnemy.Create(AdSpriteEngine);
-            with Enemy do
+            SetLength(EnemyArray, enemyCount+1);
+            EnemyArray[enemyCount]:= TEnemy.Create(AdSpriteEngine);
+            with EnemyArray[enemyCount] do
             begin
               Image:= AdImageList.Find('enemy');
               x:= (Xi - 1) * 32;
@@ -197,18 +219,20 @@ begin
               dx:= 0.05;
               Speed:= 120;
             end;
+            Inc(enemyCount);
           end;
         'p':
           begin
             Hero:= THero.Create(AdSpriteEngine);
             with Hero do
             begin
-              Image:= AdImageList.Find('bad_hero');
+              Image:= AdImageList.Find('bad_hero_back');
               x:= (Xi - 1) * 32;
               y:= Yi * 32;
               AnimActive:= False;
               AnimSpeed:= 7;
               Speed:= 150;
+              life:= True;
             end;
           end;
         'd':
@@ -221,6 +245,16 @@ begin
             end;
           end;
       end;
+end;
+
+procedure TForm1.img1Click(Sender: TObject);
+begin
+  Halt;
+end;
+
+procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Halt;
 end;
 
 end.
