@@ -2,8 +2,9 @@ unit Enemy;
 
 interface
 
-uses Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-     Dialogs,AdSprites;
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, AdSprites;
 
 type
   TEnemy = class (TImageSprite)
@@ -33,8 +34,11 @@ begin
   inherited;
   if (Sprite is TBloks) then
   begin
+    //if dx < 0 then
+     // Image:= AdImageList.Find('enemy')
+    //else
+     // Image:= AdImageList.Find('enemy_back');
     dx:= -dx;
-    
   end;
 end;
 

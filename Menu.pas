@@ -34,7 +34,7 @@ var
 
 implementation
 
-uses Main;
+uses Main, Lev;
 
 {$R *.dfm}
 
@@ -89,13 +89,16 @@ end;
 procedure TForm2.btn1Click(Sender: TObject);
 begin
   Form2.Hide;
-  Form1.ShowModal;
-  Form1.SetFocus;
+  Form4.ShowModal;
+  Form4.SetFocus;
 end;
 
 procedure TForm2.btn2Click(Sender: TObject);
 begin
   Halt;
+  Form1.Destroy;
+  Form2.Destroy;
+  Form4.Destroy;
 end;
 
 procedure TForm2.FormKeyDown(Sender: TObject; var Key: Word;

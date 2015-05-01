@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, AdDraws, AdClasses, AdTypes, AdSprites, AdPerformanceCounter, Hero, Enemy,
-  ExtCtrls;
+  ExtCtrls, UShot;
 
 type
   TDead = class (TImageSprite)
@@ -17,6 +17,14 @@ type
 
 type
   TMonets = class (TImageSprite)
+  end;
+
+type
+  TExit = class (TImageSprite)
+  end;
+
+type
+  TKey = class (TImageSprite)
   end;
 
 {type
@@ -44,16 +52,14 @@ type
     AdDraw: TAdDraw;
     AdSpriteEngine: TSpriteEngine;
     AdPerCounter: TAdPerformanceCounter;
-    AdImageList: TAdImageList;
+
     Hero: THero;
     EnemyArray: array of TEnemy;
     enemyCount: Integer;
 
-    ///////InputMandler///////
 
-      keyUp, keyDown, keyLeft, keyRight: Boolean;
+    keyUp, keyDown, keyLeft, keyRight: Boolean;
 
-    ///
     procedure Idle(Sender:TObject;var Done:boolean);
     procedure LoadMap(FileName: string);
     { Public declarations }
@@ -62,21 +68,26 @@ type
 var
   Form1: TForm1;
   list: TStringList;
+  AdImageList: TAdImageList;
+  Shot: TShot;
 
 implementation
 
-uses Menu, Pause;
+uses
+  Menu, Pause, Lev, DateUtils;
 
 {$R *.dfm}
 
 procedure TForm1.FormCreate(Sender: TObject);
+var
+  levelName: string;
 begin
   AdDraw := TAdDraw.Create(self);
   AdDraw.DllName := 'AndorraOGL.dll';
   with AdDraw.Display do
   begin
     Width:= 800;
-    Height:= 480;
+    Height:= 448;
     DisplayMode:= dmWindowed;
   end;
   if AdDraw.Initialize then
@@ -88,12 +99,13 @@ begin
     AdImageList.LoadFromFile('sprites.ail');
     AdImageList.Restore;
 
-    LoadMap('level1.txt');
+    levelName:= 'level' + IntToStr(Form4.flag + 1) + '.txt';
+    LoadMap(levelName);
 
-    {with TBackgroundSprite.Create(AdSpriteEngine) do
+    with TBackgroundSprite.Create(AdSpriteEngine) do
     begin
-      Image:= AdImageList.Find('fon')
-    end;}
+      Image:= AdImageList.Find('background')
+    end;
   end
   else
   begin
@@ -146,14 +158,12 @@ begin
   if (Key = VK_LEFT) or (Key = 65) then
   begin
     keyLeft:= True;
-    Hero.AnimStart:= 0;
-    Hero.AnimStop:= 6;
+    Hero.Image:= AdImageList.Find('hero_back');
   end;
   if (Key = VK_RIGHT) or (Key = 68) then
   begin
     keyRight:= True;
-    Hero.AnimStart:= 7;
-    Hero.AnimStop:= 13;
+    Hero.Image:= AdImageList.Find('hero');
   end;
   if (Key = VK_UP) or (Key = 87) then
     keyUp:= True;
@@ -164,6 +174,17 @@ begin
     Form3.Show;
     Form3.SetFocus;
   end;
+  {if Key = VK_CONTROL then
+  begin
+    {with TShot.Create(AdSpriteEngine) do
+    begin
+      Image:= AdImageList.Find('ball');
+      x:= (Hero.X + Hero.Width);
+      y:= Hero.Y + Hero.Height;
+      dx:= 0.5;
+    end;
+    //Shot.DoMove(AdPerCounter.TimeGap);
+  end;}
 end;
 
 procedure TForm1.FormKeyUp(Sender: TObject; var Key: Word;
@@ -192,7 +213,7 @@ begin
           begin
             with TBloks.Create(AdSpriteEngine) do
             begin
-              Image:= AdImageList.Find('bloks');
+              Image:= AdImageList.Find('blok');
               x:= (Xi - 1) * Width;
               y:= Yi * Height;
             end;
@@ -226,20 +247,39 @@ begin
             Hero:= THero.Create(AdSpriteEngine);
             with Hero do
             begin
-              Image:= AdImageList.Find('bad_hero_back');
+              Image:= AdImageList.Find('hero');
               x:= (Xi - 1) * 32;
               y:= Yi * 32;
               AnimActive:= False;
               AnimSpeed:= 7;
               Speed:= 150;
               life:= True;
+              key:= false;
             end;
           end;
-        'd':
+        's':
           begin
-            with TDead.Create(AdSpriteEngine) do
+            with TShot.Create(AdSpriteEngine) do
             begin
-              Image:= AdImageList.Find('pust');
+              Image:= AdImageList.Find('bloks');
+              x:= (Xi - 1) * Width;
+              y:= Yi * Height;
+            end;
+          end;
+        'w':
+          begin
+            with TExit.Create(AdSpriteEngine) do
+            begin
+              Image:= AdImageList.Find('doorExit');
+              x:= (Xi - 1) * 32;
+              y:= Yi * 32;
+            end;
+          end;
+        'k':
+          begin
+            with TKey.Create(AdSpriteEngine) do
+            begin
+              Image:= AdImageList.Find('key');
               x:= (Xi - 1) * 32;
               y:= Yi * 32;
             end;
@@ -255,6 +295,10 @@ end;
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Halt;
+  Form1.Destroy;
+  Form2.Destroy;
+  Form3.Destroy;
+  Form4.Destroy;
 end;
 
 end.

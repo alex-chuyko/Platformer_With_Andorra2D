@@ -15,9 +15,8 @@ type
       n: Integer;
       dx: Double;
       dy: Double;
-      maxJump: Integer;
+      key: Boolean;
       Speed: integer;
-      SpeedG: integer;
       onGround: Boolean;
       procedure DoMove(TimeGap:double);override;
       constructor Create(AParent:TSprite);override;
@@ -27,7 +26,7 @@ type
 
 implementation
 
-uses Main, Enemy;
+uses Main, Enemy, Lev;
 
 { THero }
 
@@ -35,69 +34,6 @@ constructor THero.Create(AParent: TSprite);
 begin
   inherited;
   onGround:= true;
-end;
-
-procedure THero.DoCollision(Sprite: TSprite; var Done: boolean);
-//var
-  //i, j: integer;
-begin
-  {for i:= (Round(Form1.hero.y) div 32) to (Round(Form1.hero.y + Form1.Hero.Height) div 32) do
-    for j:=(Round(Form1.Hero.x) div 32) to (Round(Form1.Hero.x + Form1.Hero.Width) div 32) do
-    begin
-      if (list[i][j] = 'x') then
-      begin
-        if (Form1.Hero.dx < 0) and (Done) then
-          Form1.Hero.x:= j * 32 + 32;
-        if (Form1.Hero.dx > 0) and (Done) then
-          Form1.Hero.x:= i * 32 - Form1.Hero.width;
-        if (Form1.Hero.dy < 0) and (not Done) then
-        begin
-          Form1.Hero.y:= i * 32 + 32;
-          Form1.Hero.dy:= 0;
-        end;
-        if (Form1.Hero.dy > 0) and (not Done) then
-        begin
-          Form1.Hero.y:= i * 32 - Form1.Hero.height;
-          Form1.Hero.dy:= 0;
-          Form1.Hero.onGround:= True;
-        end;
-      end;
-    end; }
-  if Sprite is TBloks then
-  begin
-    if (Form1.keyRight) and (list[Round(Form1.Hero.y + Form1.Hero.Width) div 32][Round(Form1.Hero.X) div 32] = 'x') then
-      x:= TBloks(Sprite).x - Self.Width + 0.5
-    else
-    if (Form1.keyLeft) and (list[Round(Form1.Hero.y) div 32][Round(Form1.Hero.X) div 32] = 'x') then
-      x:= TBloks(Sprite).x + TBloks(Sprite).Width - 0.5
-    else
-    if (Form1.keyUp) and (list[Round(Form1.Hero.y) div 32][Round(Form1.Hero.X - Form1.Hero.Height) div 32] = 'x') then
-      y:= TBloks(Sprite).Y + TBloks(Sprite).Height
-    else
-    if (not onGround) and (list[Round(Form1.Hero.y) div 32][Round(Form1.Hero.X + Form1.Hero.Height) div 32] <> 'x') then
-    begin
-      y:= TBloks(Sprite).Y - Self.Height;
-      onGround:= True;
-    end;
-  end;
-
-  if Sprite is TMonets then
-  begin
-    TMonets(Sprite).Dead;
-    n:= n + 10;
-  end;
-
-  if (Sprite is TDead) then//or (Sprite is TEnemy)  then
-  begin
-    Form1.Hero.Dead;
-    ShowMessage('GAME OVER! :(');
-    Form1.Hero.dy:= 0;
-    Form1.Hero.dx:= 0;
-    life:= false;
-    Halt;
-  end;
-  if Sprite is TEnemy then
-    TEnemy(Sprite).Dead;
 end;
 
 procedure MyCollision(flag: Boolean);
@@ -136,6 +72,93 @@ begin
       end;
   Form1.Hero.Collision;
 end;
+
+procedure THero.DoCollision(Sprite: TSprite; var Done: boolean);
+begin
+  {for i:= (Round(Form1.hero.y) div 32) to (Round(Form1.hero.y + Form1.Hero.Height) div 32) do
+    for j:=(Round(Form1.Hero.x) div 32) to (Round(Form1.Hero.x + Form1.Hero.Width) div 32) do
+    begin
+      if (list[i][j] = 'x') then
+      begin
+        if (Form1.Hero.dx < 0) and (Done) then
+          Form1.Hero.x:= j * 32 + 32;
+        if (Form1.Hero.dx > 0) and (Done) then
+          Form1.Hero.x:= i * 32 - Form1.Hero.width;
+        if (Form1.Hero.dy < 0) and (not Done) then
+        begin
+          Form1.Hero.y:= i * 32 + 32;
+          Form1.Hero.dy:= 0;
+        end;
+        if (Form1.Hero.dy > 0) and (not Done) then
+        begin
+          Form1.Hero.y:= i * 32 - Form1.Hero.height;
+          Form1.Hero.dy:= 0;
+          Form1.Hero.onGround:= True;
+        end;
+      end;
+    end; }
+  if (Sprite is TBloks) or ((Sprite is TExit) and (not key)) then
+  begin
+    if (Form1.keyRight) and (list[Round(Form1.Hero.y + Form1.Hero.Width) div 32][Round(Form1.Hero.X) div 32] = 'x') then
+      x:= TBloks(Sprite).x - Self.Width + 0.5
+    else
+    if (Form1.keyLeft) and (list[Round(Form1.Hero.y) div 32][Round(Form1.Hero.X) div 32] = 'x') then
+      x:= TBloks(Sprite).x + TBloks(Sprite).Width - 0.5
+    else
+    if (Form1.keyUp) and (list[Round(Form1.Hero.y) div 32][Round(Form1.Hero.X - Form1.Hero.Height) div 32] = 'x') then
+      y:= TBloks(Sprite).Y + TBloks(Sprite).Height
+    else
+    if (not onGround) and (list[Round(Form1.Hero.y) div 32][Round(Form1.Hero.X + Form1.Hero.Height) div 32] <> 'x') then
+    begin
+      y:= TBloks(Sprite).Y - Self.Height;
+      onGround:= True;
+    end;
+  end;
+
+  if Sprite is TKey then
+  begin
+    TKey(Sprite).Dead;
+    key:= true;
+  end;
+
+  if Sprite is TMonets then
+  begin
+    TMonets(Sprite).Dead;
+    n:= n + 10;
+  end;
+
+ { if (Sprite is TDead) then//or (Sprite is TEnemy)  then
+  begin
+    Form1.keyRight:= false;
+    Form1.keyUp:= false;
+    Form1.keyLeft:= false;
+    onGround:= true;
+    Form1.Hero.dy:= 0;
+    Form1.Hero.dx:= 0;
+    ShowMessage('GAME OVER! :(');
+    life:= false;
+    //Form1.keyRight:= false;
+    Form1.Hide;
+    Form4.Show;
+    Form1.Hero.Dead;
+    //Form1.Hero.Dead;
+    //Halt;
+  end; }
+  if Sprite is TEnemy then
+    TEnemy(Sprite).Dead;
+
+  if (Sprite is TExit) and (key) then
+  begin
+    Form1.Hero.dx:= 0;
+    Form1.Hero.dy:= 0;
+    Form4.btn1.Enabled:= true;
+    Form1.keyRight:= false;
+    Form1.Hide;
+    Form4.Show;
+    Form1.Hero.Dead;
+  end;
+end;
+
 
 procedure THero.DoMove(TimeGap: double);
 var
@@ -178,7 +201,7 @@ begin
       Done:= False;
       MyCollision(Done);
       dx:= 0;
-      Collision;
+      //Collision;
     end;
   end
   else
