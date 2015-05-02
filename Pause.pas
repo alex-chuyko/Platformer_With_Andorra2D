@@ -12,8 +12,10 @@ type
     btn1: TButton;
     btn2: TButton;
     img1: TImage;
+    btn3: TButton;
     procedure btn1Click(Sender: TObject);
     procedure btn2Click(Sender: TObject);
+    procedure btn3Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -25,6 +27,9 @@ var
 
 implementation
 
+uses
+  Menu, Main;
+
 {$R *.dfm}
 
 procedure TForm3.btn1Click(Sender: TObject);
@@ -35,6 +40,13 @@ end;
 procedure TForm3.btn2Click(Sender: TObject);
 begin
   Halt;
+end;
+
+procedure TForm3.btn3Click(Sender: TObject);
+begin
+  Form3.Close;
+  Form1.Hide;
+  Form2.ShowModal;
 end;
 
 end.

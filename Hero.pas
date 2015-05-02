@@ -2,7 +2,8 @@ unit Hero;
 
 interface
 
-uses Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs,AdSprites;
 
 type
@@ -44,11 +45,11 @@ begin
       begin
         if (Form1.Hero.dx < 0) then
           for j:= (Round(Form1.Hero.x) div 32) to (Round(Form1.Hero.x) div 32) do
-            if (list[Round(Form1.hero.y) div 32][j + 1] = 'x') then
+            if (list[Round(Form1.hero.y) div 32][j + 1] = 'x') or ((list[Round(Form1.hero.y) div 32][j + 1] = 'w') and (not Form1.Hero.key)) then
               Form1.Hero.x:= j * 32 + Form1.Hero.Width;
         if (Form1.Hero.dx > 0) then
           for j:= (Round(Form1.Hero.x) div 32) to (Round(Form1.Hero.x + Form1.Hero.Width) div 32) do
-            if (list[Round(Form1.hero.y) div 32][j + 1] = 'x') then
+            if (list[Round(Form1.hero.y) div 32][j + 1] = 'x') or ((list[Round(Form1.hero.y) div 32][j + 1] = 'w') and (not Form1.Hero.key)) then
               Form1.Hero.x:= j * 32 - Form1.Hero.Width;
       end;
 
@@ -74,6 +75,8 @@ begin
 end;
 
 procedure THero.DoCollision(Sprite: TSprite; var Done: boolean);
+var
+  flag: Boolean;
 begin
   if (Sprite is TBloks) or ((Sprite is TExit) and (not key)) then
   begin
@@ -122,9 +125,34 @@ begin
     //Form1.Hero.Dead;
     //Halt;
   end; }
-  
+
+  if (Sprite is TEnemy) then
+  begin
+    flag:= false;
+    if dy > 0 then
+    begin
+      TEnemy(Sprite).Dead;
+      TEnemy(Sprite).life:= false;
+      dy:= -0.4;
+      n:= n + 5;
+      flag:= true;
+    end;
+  end;
+
   if Sprite is TEnemy then
-    TEnemy(Sprite).Dead;
+  begin
+    if (not flag) and (TEnemy(Sprite).life) then
+     begin
+      Form1.Hero.dx:= 0;
+      Form1.Hero.dy:= 0;
+      //Form4.btn1.Enabled:= true;
+      Form1.keyRight:= false;
+      Application.MessageBox(PChar('GAME OVER! :(' + #13 + #10 + 'Ваш результат:  ' + IntToStr(N) + ' очков'), PChar('GAME OVER'), MB_MODEMASK);
+      Form1.Hide;
+      Form4.Show;
+      Form1.Hero.Dead;
+    end;
+  end;
 
   if (Sprite is TExit) and (key) then
   begin
@@ -132,6 +160,7 @@ begin
     Form1.Hero.dy:= 0;
     Form4.btn1.Enabled:= true;
     Form1.keyRight:= false;
+    Application.MessageBox(PChar('Поздравляем! Вы прошли уровень!' + #13 + #10 + 'Ваш результат:  ' + IntToStr(N) + ' очков'), PChar('Уровень пройден!'), MB_MODEMASK);
     Form1.Hide;
     Form4.Show;
     Form1.Hero.Dead;

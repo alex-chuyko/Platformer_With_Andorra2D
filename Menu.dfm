@@ -843,9 +843,9 @@ object Form2: TForm2
       D9}
   end
   object lbl1: TLabel
-    Left = 8
+    Left = 13
     Top = 56
-    Width = 383
+    Width = 373
     Height = 63
     Caption = 'Platformer'
     Color = clBtnHighlight
@@ -853,7 +853,7 @@ object Form2: TForm2
     Font.Color = clLime
     Font.Height = -48
     Font.Name = 'Ravie'
-    Font.Style = [fsBold]
+    Font.Style = []
     ParentColor = False
     ParentFont = False
   end

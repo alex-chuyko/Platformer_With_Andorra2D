@@ -235,6 +235,7 @@ begin
               AnimSpeed:= 10;
               dx:= 0.05;
               Speed:= 120;
+              life:= true;
             end;
             Inc(enemyCount);
           end;

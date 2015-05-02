@@ -1,6 +1,6 @@
 object Form3: TForm3
-  Left = 877
-  Top = 432
+  Left = 890
+  Top = 450
   BorderStyle = bsNone
   Caption = 'Form3'
   ClientHeight = 161
@@ -2396,7 +2396,7 @@ object Form3: TForm3
   end
   object btn2: TButton
     Left = 9
-    Top = 87
+    Top = 103
     Width = 80
     Height = 25
     Caption = 'Exit'
@@ -2408,6 +2408,21 @@ object Form3: TForm3
     ParentFont = False
     TabOrder = 1
     OnClick = btn2Click
+  end
+  object btn3: TButton
+    Left = 9
+    Top = 63
+    Width = 80
+    Height = 25
+    Caption = 'Menu'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tempus Sans ITC'
+    Font.Style = [fsBold, fsItalic]
+    ParentFont = False
+    TabOrder = 2
+    OnClick = btn3Click
   end
   object xpmnfst1: TXPManifest
     Left = 152
