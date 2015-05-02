@@ -57,10 +57,9 @@ type
     EnemyArray: array of TEnemy;
     enemyCount: Integer;
 
+    keyUp, keyLeft, keyRight: Boolean;
 
-    keyUp, keyDown, keyLeft, keyRight: Boolean;
-
-    procedure Idle(Sender:TObject;var Done:boolean);
+    procedure Idle(Sender:TObject; var Done: boolean);
     procedure LoadMap(FileName: string);
     { Public declarations }
   end;
@@ -86,8 +85,8 @@ begin
   AdDraw.DllName := 'AndorraOGL.dll';
   with AdDraw.Display do
   begin
-    Width:= 800;
-    Height:= 448;
+    Width:= 800; //800
+    Height:= 480; //750
     DisplayMode:= dmWindowed;
   end;
   if AdDraw.Initialize then
@@ -133,7 +132,7 @@ begin
         todey:= TimeToStr(now);
         TextOut(640, 450, 'Time: ' + todey);
         //TextOut(5, 5,'FPS: ' + FloatToStr(AdPerCounter.FPS));
-        Pen.Color:= Ad_ARGB(255,255,255,255);
+        Pen.Color:= Ad_ARGB(255,0,0,0);
         Font:= AdDraw.Fonts.GenerateFont('Comic Sans MS',15, [afItalic]);
         TextOut(5, 450,'Points: ' + IntToStr(Hero.n));
         Release;
@@ -167,8 +166,6 @@ begin
   end;
   if (Key = VK_UP) or (Key = 87) then
     keyUp:= True;
-  if (Key = VK_DOWN) or (Key = 83) then
-    keyDown:= True;
   if Key = 27 then
   begin
     Form3.Show;
@@ -196,8 +193,6 @@ begin
     keyRight:= False;
   if (Key = VK_UP) or (Key = 87) then
     keyUp:= False;
-  if (Key = VK_DOWN) or (Key = 83) then
-    keyDown:= False;
 end;
 
 procedure TForm1.LoadMap(FileName: string);
@@ -234,9 +229,10 @@ begin
             EnemyArray[enemyCount]:= TEnemy.Create(AdSpriteEngine);
             with EnemyArray[enemyCount] do
             begin
-              Image:= AdImageList.Find('enemy');
+              Image:= AdImageList.Find('enemy_back');
               x:= (Xi - 1) * 32;
               y:= Yi * 32;
+              AnimSpeed:= 10;
               dx:= 0.05;
               Speed:= 120;
             end;

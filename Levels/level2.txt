@@ -1,8 +1,8 @@
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-xxxxxxx                                                                              x  
+xxxxxxx                                                k                             x  
 x                                     m   m           xxx                            x
 x                                    m  m  m               xx                       xx
-x          s                          m   m                                          x
+x                                     m   m                                          x
 x                                                  xxxxxxxxxx    xxx                 x
 x        x                          xxxxxxxxxxxxxxxx                                 x
 x        x m                                                            xxx       xxxx
@@ -11,5 +11,4 @@ x  p     xxxxxxxxxxxxx                                                          
 x                                         mmmmmmmmmmm                  mm       xxxxxx
 x                    m                  mmm   mmm   mmm               mmmm           x
 x             e     mmm      e       mmmmmmmmmmmmmmmmmmmmm           x    e   x      x
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx     xxxxxxxxxxx      x
-dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

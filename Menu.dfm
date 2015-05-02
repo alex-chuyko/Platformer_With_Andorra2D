@@ -843,15 +843,15 @@ object Form2: TForm2
       D9}
   end
   object lbl1: TLabel
-    Left = 21
+    Left = 8
     Top = 56
-    Width = 341
-    Height = 71
-    Caption = 'The Game'
+    Width = 383
+    Height = 63
+    Caption = 'Platformer'
     Color = clBtnHighlight
     Font.Charset = ANSI_CHARSET
-    Font.Color = clRed
-    Font.Height = -53
+    Font.Color = clLime
+    Font.Height = -48
     Font.Name = 'Ravie'
     Font.Style = [fsBold]
     ParentColor = False

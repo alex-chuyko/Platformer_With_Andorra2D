@@ -1,6 +1,6 @@
 object Form3: TForm3
-  Left = 866
-  Top = 422
+  Left = 877
+  Top = 432
   BorderStyle = bsNone
   Caption = 'Form3'
   ClientHeight = 161
@@ -2384,7 +2384,7 @@ object Form3: TForm3
     Top = 23
     Width = 80
     Height = 25
-    Caption = 'Start'
+    Caption = 'Return'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -16

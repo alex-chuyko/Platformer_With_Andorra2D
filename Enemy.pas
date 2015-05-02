@@ -34,11 +34,11 @@ begin
   inherited;
   if (Sprite is TBloks) then
   begin
-    //if dx < 0 then
-     // Image:= AdImageList.Find('enemy')
-    //else
-     // Image:= AdImageList.Find('enemy_back');
-    dx:= -dx;
+    dx:= dx * (-1);
+    if dx > 0 then
+      Image:= AdImageList.Find('enemy_back')
+    else
+      Image:= AdImageList.Find('enemy');
   end;
 end;
 

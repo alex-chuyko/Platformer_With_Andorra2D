@@ -4,13 +4,15 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, XPMan;
+  Dialogs, StdCtrls, XPMan, jpeg, ExtCtrls;
 
 type
   TForm4 = class(TForm)
     xpmnfst1: TXPManifest;
     btn2: TButton;
     btn1: TButton;
+    img1: TImage;
+    lbl1: TLabel;
     procedure btn2Click(Sender: TObject);
     procedure btn1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);

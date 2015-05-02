@@ -43,9 +43,9 @@ begin
   if flag then
       begin
         if (Form1.Hero.dx < 0) then
-          //for j:= (Round(Form1.Hero.x) div 32) to (Round(Form1.Hero.x + Form1.Hero.Width) div 32) do
-            if (list[Round(Form1.hero.y) div 32][Round(Form1.Hero.x) div 32 + 1] = 'x') then
-              Form1.Hero.x:= Round(Form1.Hero.x);
+          for j:= (Round(Form1.Hero.x) div 32) to (Round(Form1.Hero.x) div 32) do
+            if (list[Round(Form1.hero.y) div 32][j + 1] = 'x') then
+              Form1.Hero.x:= j * 32 + Form1.Hero.Width;
         if (Form1.Hero.dx > 0) then
           for j:= (Round(Form1.Hero.x) div 32) to (Round(Form1.Hero.x + Form1.Hero.Width) div 32) do
             if (list[Round(Form1.hero.y) div 32][j + 1] = 'x') then
@@ -55,15 +55,15 @@ begin
   if not flag then
       begin
         if (Form1.Hero.dy < 0) then
-          for i:= (Round(Form1.hero.y - Form1.Hero.Height) div 32) to (Round(Form1.hero.y) div 32) do
-            if (list[i][Round(Form1.hero.x) div 32 + 1] = 'x') then
+          for i:= (Round(Form1.hero.y) div 32) to (Round(Form1.hero.y) div 32) do
+            if (list[i][(Round(Form1.hero.x + Form1.Hero.Width - 1)) div 32 + 1] = 'x') or (list[i][(Round(Form1.hero.x)) div 32 + 1] = 'x') then
             begin
-              Form1.Hero.y:= i * 32 + 33;
+              Form1.Hero.y:= i * 32 + 32;
               Form1.Hero.dy:= 0;
             end;
         if (Form1.Hero.dy > 0) then
-          for i:= (Round(Form1.hero.y) div 32) to (Round(Form1.hero.y + Form1.Hero.Height) div 32) do
-            if (list[i][Round(Form1.hero.x) div 32 + 1] = 'x') then
+          for i:= (Round(Form1.hero.y + Form1.Hero.Height) div 32) to (Round(Form1.hero.y + Form1.Hero.Height) div 32) do
+            if (list[i][(Round(Form1.hero.x + Form1.Hero.Width - 1)) div 32 + 1] = 'x') or (list[i][(Round(Form1.hero.x)) div 32 + 1] = 'x') then
             begin
               Form1.Hero.y:= i * 32 - Form1.Hero.height;
               Form1.Hero.dy:= 0;
@@ -75,28 +75,6 @@ end;
 
 procedure THero.DoCollision(Sprite: TSprite; var Done: boolean);
 begin
-  {for i:= (Round(Form1.hero.y) div 32) to (Round(Form1.hero.y + Form1.Hero.Height) div 32) do
-    for j:=(Round(Form1.Hero.x) div 32) to (Round(Form1.Hero.x + Form1.Hero.Width) div 32) do
-    begin
-      if (list[i][j] = 'x') then
-      begin
-        if (Form1.Hero.dx < 0) and (Done) then
-          Form1.Hero.x:= j * 32 + 32;
-        if (Form1.Hero.dx > 0) and (Done) then
-          Form1.Hero.x:= i * 32 - Form1.Hero.width;
-        if (Form1.Hero.dy < 0) and (not Done) then
-        begin
-          Form1.Hero.y:= i * 32 + 32;
-          Form1.Hero.dy:= 0;
-        end;
-        if (Form1.Hero.dy > 0) and (not Done) then
-        begin
-          Form1.Hero.y:= i * 32 - Form1.Hero.height;
-          Form1.Hero.dy:= 0;
-          Form1.Hero.onGround:= True;
-        end;
-      end;
-    end; }
   if (Sprite is TBloks) or ((Sprite is TExit) and (not key)) then
   begin
     if (Form1.keyRight) and (list[Round(Form1.Hero.y + Form1.Hero.Width) div 32][Round(Form1.Hero.X) div 32] = 'x') then
@@ -144,6 +122,7 @@ begin
     //Form1.Hero.Dead;
     //Halt;
   end; }
+  
   if Sprite is TEnemy then
     TEnemy(Sprite).Dead;
 
@@ -194,7 +173,7 @@ begin
       X:= X + dx * Form1.AdPerCounter.TimeGap;
       Done:= True;
       MyCollision(Done);
-      if (not onGround) or (list[Round(Form1.Hero.Y) div 32][Round(Form1.Hero.X) div 32] <> 'x')then
+      if (not onGround)then// or (list[Round(Form1.Hero.Y) div 32][Round(Form1.Hero.X) div 32] <> 'x')then
         dy:= dy + 0.0007 * Form1.AdPerCounter.TimeGap;
       y:= y + dy * Form1.AdPerCounter.TimeGap;
       onGround:= False;
@@ -211,7 +190,6 @@ begin
   begin
     if (Form1.Hero.X > 385) and (Form1.Hero.X < 2337) then
       AdSpriteEngine.x:= - Self.X - Self.Width / 2 + AdDraw.Width / 2;
-    //AdSpriteEngine.Y:= - Self.Y - Self.Height / 2 + AdDraw.Height / 2;
   end;
 
   Collision;
