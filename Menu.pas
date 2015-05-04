@@ -14,11 +14,12 @@ type
     btn2: TButton;
     img1: TImage;
     lbl1: TLabel;
+    btn3: TButton;
+    lbl2: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure btn1Click(Sender: TObject);
     procedure btn2Click(Sender: TObject);
-    procedure FormKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure btn3Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -40,7 +41,6 @@ uses Main, Lev;
 
 procedure TForm2.FormCreate(Sender: TObject);
 begin
-  //Form1.Hide;
   AdDraw := TAdDraw.Create(self);
   AdDraw.DllName := 'AndorraOGL.dll';
   with AdDraw.Display do
@@ -51,7 +51,6 @@ begin
   end;
   if AdDraw.Initialize then
   begin
-    //Application.OnIdle := Idle;
     AdSpriteEngine:= TSpriteEngine.Create(AdDraw);
     AdPerCounter:= TAdPerformanceCounter.Create;
     AdImageList:= TAdImageList.Create(AdDraw);
@@ -73,44 +72,34 @@ begin
                 'mode or another video adapter.');
     halt;
   end;
-
-  {if  then
-  begin
-    AdPerCounter.Calculate;
-    AdDraw.ClearSurface(clBlack);
-
-    AdDraw.BeginScene;
-      AdSpriteEngine.Move(AdPerCounter.TimeGap / 1000);
-      AdSpriteEngine.Draw;
-  AdDraw.EndScene;
-  end; }
 end;
 
 procedure TForm2.btn1Click(Sender: TObject);
 begin
   Form2.Hide;
-  Form4.ShowModal;
-  Form4.SetFocus;
+  Application.CreateForm(TForm4, Form4);
+  Form4.Show;
 end;
 
 procedure TForm2.btn2Click(Sender: TObject);
+begin
+  Application.MessageBox('Ваша задача: не попадаясь врагам, по возможности' + #13 + #10 +
+                         'убивая их и собирая монеты, найти ключ и добраться до выхода.' + #13 + #10 +
+                         'Чтобы убить врага, необходимо на него напрыгнуть.' + #13 + #10 + #13 + #10 +
+                         'Управление:' + #13 + #10 +
+                         'W/стрелка вверх   - прыжок;' + #13 + #10 +
+                         'D/стрелка вправо - бег вправо;' + #13 + #10 +
+                         'A/стрелка влево   - бег влево;' + #13 + #10 +
+                         'Esc                            - пауза;' + #13 + #10 + #13 + #10 +
+                         'Удачного времяпрепровождения! :)', 'HELP')
+end;
+
+procedure TForm2.btn3Click(Sender: TObject);
 begin
   Halt;
   Form1.Destroy;
   Form2.Destroy;
   Form4.Destroy;
-end;
-
-procedure TForm2.FormKeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
-begin
-  Form2.SetFocus;
-  if Key = 27 then
-  begin
-    ShowMessage('OK');
-    //Form2.Hide;
-    //Form1.ShowModal;
-  end;
 end;
 
 end.

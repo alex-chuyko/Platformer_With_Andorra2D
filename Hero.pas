@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs,AdSprites;
+  Dialogs, AdSprites, MmSystem;
 
 type
   THero = class(TImageSprite)
@@ -13,7 +13,7 @@ type
 
     public
       life: Boolean;
-      n: Integer;
+      points: Integer;
       dx: Double;
       dy: Double;
       key: Boolean;
@@ -27,7 +27,8 @@ type
 
 implementation
 
-uses Main, Enemy, Lev;
+uses
+  Main, Enemy, Lev;
 
 { THero }
 
@@ -71,12 +72,12 @@ begin
               Form1.Hero.onGround:= True;
             end;
       end;
-  Form1.Hero.Collision;
 end;
 
 procedure THero.DoCollision(Sprite: TSprite; var Done: boolean);
 var
   flag: Boolean;
+  i, j: integer;
 begin
   if (Sprite is TBloks) or ((Sprite is TExit) and (not key)) then
   begin
@@ -102,29 +103,12 @@ begin
     key:= true;
   end;
 
-  if Sprite is TMonets then
+  if (Sprite is TMonets) and (TMonets(Sprite).life) then
   begin
     TMonets(Sprite).Dead;
-    n:= n + 10;
+    TMonets(Sprite).life:= false;
+    points:= points + 10;
   end;
-
- { if (Sprite is TDead) then//or (Sprite is TEnemy)  then
-  begin
-    Form1.keyRight:= false;
-    Form1.keyUp:= false;
-    Form1.keyLeft:= false;
-    onGround:= true;
-    Form1.Hero.dy:= 0;
-    Form1.Hero.dx:= 0;
-    ShowMessage('GAME OVER! :(');
-    life:= false;
-    //Form1.keyRight:= false;
-    Form1.Hide;
-    Form4.Show;
-    Form1.Hero.Dead;
-    //Form1.Hero.Dead;
-    //Halt;
-  end; }
 
   if (Sprite is TEnemy) then
   begin
@@ -134,7 +118,7 @@ begin
       TEnemy(Sprite).Dead;
       TEnemy(Sprite).life:= false;
       dy:= -0.4;
-      n:= n + 5;
+      points:= points + 5;
       flag:= true;
     end;
   end;
@@ -142,28 +126,31 @@ begin
   if Sprite is TEnemy then
   begin
     if (not flag) and (TEnemy(Sprite).life) then
-     begin
-      Form1.Hero.dx:= 0;
-      Form1.Hero.dy:= 0;
-      //Form4.btn1.Enabled:= true;
+    begin
+      dx:= 0;
+      dy:= 0;
       Form1.keyRight:= false;
-      Application.MessageBox(PChar('GAME OVER! :(' + #13 + #10 + 'Ваш результат:  ' + IntToStr(N) + ' очков'), PChar('GAME OVER'), MB_MODEMASK);
+      Application.MessageBox(PChar('GAME OVER! :(' + #13 + #10 + 'Ваш результат:  ' + IntToStr(points) + ' очков' + #13 + #10 +
+                                   'Затраченное время: ' + Form1.timeLevel), PChar('GAME OVER'), MB_MODEMASK);
       Form1.Hide;
       Form4.Show;
       Form1.Hero.Dead;
+      Form1.Hero.life:= false;
     end;
   end;
 
   if (Sprite is TExit) and (key) then
   begin
-    Form1.Hero.dx:= 0;
-    Form1.Hero.dy:= 0;
-    Form4.btn1.Enabled:= true;
+    dx:= 0;
+    dy:= 0;
     Form1.keyRight:= false;
-    Application.MessageBox(PChar('Поздравляем! Вы прошли уровень!' + #13 + #10 + 'Ваш результат:  ' + IntToStr(N) + ' очков'), PChar('Уровень пройден!'), MB_MODEMASK);
-    Form1.Hide;
-    Form4.Show;
-    Form1.Hero.Dead;
+    Application.MessageBox(PChar('Поздравляем! Вы прошли уровень!' + #13 + #10 + 'Ваш результат:  ' + IntToStr(points) + ' очков'+ #13 + #10 +
+                                 'Затраченное время: ' + Form1.timeLevel), PChar('Уровень пройден!'), MB_MODEMASK);
+    Form1.Destroy;
+    Application.CreateForm(TForm4, Form4);
+    if Form4.flag = 0 then
+      Form4.btn1.Enabled:= true;
+    Form4.ShowModal;
   end;
 end;
 
@@ -174,46 +161,51 @@ var
 begin
   inherited;
   AnimActive:= True;
+
   if (Form1.keyLeft) then
     begin
       Form1.Hero.dx:= -0.2;
       AnimLoop:= True;
     end;
+
   if (Form1.keyRight) then
     begin
       Form1.Hero.dx:= 0.2;
       AnimLoop:= True;
     end;
-      if (Form1.keyUp) and (y > 0) then
-        if Form1.Hero.onGround then
-        begin
-          Form1.Hero.dy:= -0.4;
-          Form1.Hero.onGround:= False;
-        end;
+
+  if (Form1.keyUp) and (y > 0) then
+    if Form1.Hero.onGround then
+    begin
+      Form1.Hero.dy:= -0.4;
+      Form1.Hero.onGround:= False;
+    end;
 
   if (not Form1.keyLeft) and (not Form1.keyRight) then
     AnimActive:= false;
-    //Collision;
 
   if life then
   begin
     with Form1.Hero do
     begin
       X:= X + dx * Form1.AdPerCounter.TimeGap;
+
       Done:= True;
       MyCollision(Done);
-      if (not onGround)then// or (list[Round(Form1.Hero.Y) div 32][Round(Form1.Hero.X) div 32] <> 'x')then
+
+      if (not onGround) then
         dy:= dy + 0.0007 * Form1.AdPerCounter.TimeGap;
       y:= y + dy * Form1.AdPerCounter.TimeGap;
       onGround:= False;
+
       Done:= False;
       MyCollision(Done);
+      
       dx:= 0;
-      //Collision;
     end;
   end
   else
-    Halt;
+    Form1.Destroy;
 
   with Form1 do
   begin

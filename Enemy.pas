@@ -32,7 +32,7 @@ end;
 procedure TEnemy.DoCollision(Sprite: TSprite; var Done: boolean);
 begin
   inherited;
-  if (Sprite is TBloks) then
+  if (Sprite is TBloks) and ((list[Round(Sprite.Y + 1) div 32][Round(Sprite.X) div 32 + 1] = 'x') or (list[Round(Sprite.Y + 1) div 32][Round(Sprite.X) div 32 - 1] = 'x')) then
   begin
     dx:= dx * (-1);
     if dx > 0 then

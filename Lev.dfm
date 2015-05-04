@@ -1,6 +1,6 @@
 object Form4: TForm4
-  Left = 750
-  Top = 298
+  Left = 753
+  Top = 286
   Width = 416
   Height = 539
   Caption = 'Levels'
@@ -855,6 +855,21 @@ object Form4: TForm4
     ParentColor = False
     ParentFont = False
   end
+  object lbl2: TLabel
+    Left = 16
+    Top = 56
+    Width = 26
+    Height = 11
+    Caption = 'by Alex'
+    Color = clWhite
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -8
+    Font.Name = 'Tempus Sans ITC'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+  end
   object btn2: TButton
     Left = 157
     Top = 152
@@ -885,6 +900,36 @@ object Form4: TForm4
     ParentFont = False
     TabOrder = 1
     OnClick = btn1Click
+  end
+  object btn3: TButton
+    Left = 13
+    Top = 464
+    Width = 86
+    Height = 25
+    Caption = 'Menu'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tempus Sans ITC'
+    Font.Style = [fsBold, fsItalic]
+    ParentFont = False
+    TabOrder = 2
+    OnClick = btn3Click
+  end
+  object btn4: TButton
+    Left = 301
+    Top = 464
+    Width = 86
+    Height = 25
+    Caption = 'Exit'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tempus Sans ITC'
+    Font.Style = [fsBold, fsItalic]
+    ParentFont = False
+    TabOrder = 3
+    OnClick = btn4Click
   end
   object xpmnfst1: TXPManifest
     Left = 368

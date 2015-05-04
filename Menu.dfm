@@ -1,6 +1,6 @@
 object Form2: TForm2
-  Left = 349
-  Top = 177
+  Left = 763
+  Top = 259
   BorderStyle = bsNone
   Caption = 'Menu'
   ClientHeight = 500
@@ -13,7 +13,6 @@ object Form2: TForm2
   Font.Style = []
   OldCreateOrder = False
   OnCreate = FormCreate
-  OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
   object img1: TImage
@@ -857,6 +856,21 @@ object Form2: TForm2
     ParentColor = False
     ParentFont = False
   end
+  object lbl2: TLabel
+    Left = 16
+    Top = 56
+    Width = 26
+    Height = 11
+    Caption = 'by Alex'
+    Color = clWhite
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -8
+    Font.Name = 'Tempus Sans ITC'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+  end
   object btn1: TButton
     Left = 147
     Top = 208
@@ -877,7 +891,7 @@ object Form2: TForm2
     Top = 272
     Width = 105
     Height = 41
-    Caption = 'Exit'
+    Caption = 'Help'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -16
@@ -886,6 +900,21 @@ object Form2: TForm2
     ParentFont = False
     TabOrder = 1
     OnClick = btn2Click
+  end
+  object btn3: TButton
+    Left = 147
+    Top = 336
+    Width = 105
+    Height = 41
+    Caption = 'Exit'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tempus Sans ITC'
+    Font.Style = [fsBold, fsItalic]
+    ParentFont = False
+    TabOrder = 2
+    OnClick = btn3Click
   end
   object xpmnfst1: TXPManifest
     Left = 168

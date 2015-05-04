@@ -2394,12 +2394,12 @@ object Form3: TForm3
     TabOrder = 0
     OnClick = btn1Click
   end
-  object btn2: TButton
+  object btn3: TButton
     Left = 9
-    Top = 103
+    Top = 63
     Width = 80
     Height = 25
-    Caption = 'Exit'
+    Caption = 'Menu'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -16
@@ -2409,12 +2409,12 @@ object Form3: TForm3
     TabOrder = 1
     OnClick = btn2Click
   end
-  object btn3: TButton
+  object btn2: TButton
     Left = 9
-    Top = 63
+    Top = 103
     Width = 80
     Height = 25
-    Caption = 'Menu'
+    Caption = 'Exit'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -16

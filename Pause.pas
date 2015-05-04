@@ -10,9 +10,9 @@ type
   TForm3 = class(TForm)
     xpmnfst1: TXPManifest;
     btn1: TButton;
-    btn2: TButton;
     img1: TImage;
     btn3: TButton;
+    btn2: TButton;
     procedure btn1Click(Sender: TObject);
     procedure btn2Click(Sender: TObject);
     procedure btn3Click(Sender: TObject);
@@ -28,7 +28,7 @@ var
 implementation
 
 uses
-  Menu, Main;
+  Menu, Main, Lev;
 
 {$R *.dfm}
 
@@ -37,16 +37,19 @@ begin
   Form3.Close;
 end;
 
-procedure TForm3.btn2Click(Sender: TObject);
-begin
-  Halt;
-end;
-
 procedure TForm3.btn3Click(Sender: TObject);
 begin
-  Form3.Close;
-  Form1.Hide;
-  Form2.ShowModal;
+  Halt;
+  Form1.Destroy;
+  Form2.Destroy;
+  Form4.Destroy;
+end;
+
+procedure TForm3.btn2Click(Sender: TObject);
+begin
+  Form3.Hide;
+  Form1.Destroy;
+  Form2.Show;
 end;
 
 end.
