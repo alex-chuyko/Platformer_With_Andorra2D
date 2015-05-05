@@ -843,9 +843,9 @@ object Form4: TForm4
   object lbl1: TLabel
     Left = 8
     Top = 56
-    Width = 383
+    Width = 381
     Height = 63
-    Caption = 'Platformer'
+    Caption = 'Platgamrix'
     Color = clBtnHighlight
     Font.Charset = ANSI_CHARSET
     Font.Color = clLime
@@ -877,10 +877,10 @@ object Form4: TForm4
     Height = 25
     Caption = 'Level 1'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clLime
     Font.Height = -16
-    Font.Name = 'Tempus Sans ITC'
-    Font.Style = [fsBold, fsItalic]
+    Font.Name = 'VCR OSD Mono'
+    Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 0
     OnClick = btn2Click
@@ -893,10 +893,10 @@ object Form4: TForm4
     Caption = 'Level 2'
     Enabled = False
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clLime
     Font.Height = -16
-    Font.Name = 'Tempus Sans ITC'
-    Font.Style = [fsBold, fsItalic]
+    Font.Name = 'VCR OSD Mono'
+    Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 1
     OnClick = btn1Click
@@ -908,10 +908,10 @@ object Form4: TForm4
     Height = 25
     Caption = 'Menu'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clLime
     Font.Height = -16
-    Font.Name = 'Tempus Sans ITC'
-    Font.Style = [fsBold, fsItalic]
+    Font.Name = 'VCR OSD Mono'
+    Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 2
     OnClick = btn3Click
@@ -923,10 +923,10 @@ object Form4: TForm4
     Height = 25
     Caption = 'Exit'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clLime
     Font.Height = -16
-    Font.Name = 'Tempus Sans ITC'
-    Font.Style = [fsBold, fsItalic]
+    Font.Name = 'VCR OSD Mono'
+    Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 3
     OnClick = btn4Click

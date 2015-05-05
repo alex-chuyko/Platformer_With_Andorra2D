@@ -35,7 +35,8 @@ var
 
 implementation
 
-uses Main, Lev;
+uses
+  Main, Lev;
 
 {$R *.dfm}
 

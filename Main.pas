@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, AdDraws, AdClasses, AdTypes, AdSprites, AdPerformanceCounter, Hero, Enemy,
-  ExtCtrls, UShot, MMSystem, MPlayer;
+  ExtCtrls, MMSystem, MPlayer;
 
 type
   TDead = class (TImageSprite)
@@ -61,13 +61,13 @@ var
   Form1: TForm1;
   list: TStringList;
   AdImageList: TAdImageList;
-  Shot: TShot;
   Start: TDateTime;
+  KeyTable: TKey;
 
 implementation
 
 uses
-  Menu, Pause, Lev, DateUtils;
+  Menu, Pause, Lev, DateUtils, AdCanvas;
 
 {$R *.dfm}
 
@@ -122,12 +122,17 @@ begin
       AdSpriteEngine.Dead;
       with AdDraw.Canvas do
       begin
-        timeLevel:= TimeToStr(now - Start);
-        TextOut(650, 0, 'Time: ' + timeLevel);  //482
+        timeLevel:= TimeToStr(now - Start);  
         //TextOut(5, 5,'FPS: ' + FloatToStr(AdPerCounter.FPS));
-        Pen.Color:= Ad_ARGB(255,0,0,0);
-        Font:= AdDraw.Fonts.GenerateFont('Comic Sans MS',15, [afItalic]);
+        Pen.Color:= Ad_ARGB(255, 255, 255, 255);
+        Font:= AdDraw.Fonts.GenerateFont('VCR OSD Mono', 20, [afBold]);
+        TextOut(580, 0, 'Time: ' + timeLevel);
         TextOut(5, 0,'Points: ' + IntToStr(Hero.points));
+        Pen.Color:= Ad_ARGB(255, 255, 241, 111);
+        if not Hero.key then
+          TextOut(350, 0, 'KEY -')
+        else
+          TextOut(350, 0, 'KEY +');
         Release;
       end;
     AdDraw.EndScene;
@@ -159,7 +164,7 @@ begin
     Hero.Image:= AdImageList.Find('hero');
   end;
 
-  if (Key = VK_UP) or (Key = 87) then
+  if (Key = VK_UP) or (Key = 87) or (Key = 32) then
     keyUp:= True;
 
   if Key = 27 then
@@ -178,7 +183,7 @@ begin
   if (Key = VK_RIGHT) or (Key = 68) then
     keyRight:= False;
     
-  if (Key = VK_UP) or (Key = 87) then
+  if (Key = VK_UP) or (Key = 87) or (Key = 32) then
     keyUp:= False;
 end;
 
@@ -243,16 +248,6 @@ begin
               Speed:= 150;
               life:= True;
               key:= false;
-            end;
-          end;
-
-        's':
-          begin
-            with TShot.Create(AdSpriteEngine) do
-            begin
-              Image:= AdImageList.Find('bloks');
-              x:= (Xi - 1) * Width;
-              y:= Yi * Height;
             end;
           end;
 

@@ -844,9 +844,9 @@ object Form2: TForm2
   object lbl1: TLabel
     Left = 13
     Top = 56
-    Width = 373
+    Width = 371
     Height = 63
-    Caption = 'Platformer'
+    Caption = 'Platgamrix'
     Color = clBtnHighlight
     Font.Charset = ANSI_CHARSET
     Font.Color = clLime
@@ -878,10 +878,10 @@ object Form2: TForm2
     Height = 42
     Caption = 'Start'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -16
-    Font.Name = 'Tempus Sans ITC'
-    Font.Style = [fsBold, fsItalic]
+    Font.Color = clLime
+    Font.Height = -21
+    Font.Name = 'VCR OSD Mono'
+    Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 0
     OnClick = btn1Click
@@ -893,10 +893,10 @@ object Form2: TForm2
     Height = 41
     Caption = 'Help'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -16
-    Font.Name = 'Tempus Sans ITC'
-    Font.Style = [fsBold, fsItalic]
+    Font.Color = clLime
+    Font.Height = -21
+    Font.Name = 'VCR OSD Mono'
+    Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 1
     OnClick = btn2Click
@@ -908,10 +908,10 @@ object Form2: TForm2
     Height = 41
     Caption = 'Exit'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -16
-    Font.Name = 'Tempus Sans ITC'
-    Font.Style = [fsBold, fsItalic]
+    Font.Color = clLime
+    Font.Height = -21
+    Font.Name = 'VCR OSD Mono'
+    Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 2
     OnClick = btn3Click

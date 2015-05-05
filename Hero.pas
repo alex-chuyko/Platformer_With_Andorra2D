@@ -132,8 +132,9 @@ begin
       Form1.keyRight:= false;
       Application.MessageBox(PChar('GAME OVER! :(' + #13 + #10 + 'Ваш результат:  ' + IntToStr(points) + ' очков' + #13 + #10 +
                                    'Затраченное время: ' + Form1.timeLevel), PChar('GAME OVER'), MB_MODEMASK);
-      Form1.Hide;
-      Form4.Show;
+      Form1.Destroy;
+      Application.CreateForm(TForm4, Form4);
+      Form4.ShowModal;
       Form1.Hero.Dead;
       Form1.Hero.life:= false;
     end;
